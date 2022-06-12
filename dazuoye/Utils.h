@@ -14,8 +14,7 @@ private:
 std::filesystem::path Utils::source()
 {
 	std::filesystem::path path = std::filesystem::current_path();
-		path += "\\bmp";
-		return path;
+		return path / "bmp";
 }
 
 void stretch() 
@@ -37,15 +36,13 @@ void stretch()
 		{
 			int desireWidth = iw;
 			int desireHeight = ih;
-			while (iw > 150)
+			while (desireWidth > 150)
 			{
-				desireWidth = iw / 2;
-				iw = desireWidth;
+				desireWidth/= 2;
 			}
-			while (ih > 150)
+			while (desireWidth > 150)
 			{
-				desireHeight = ih / 2;
-				ih = desireHeight;
+				desireHeight /= 2;
 			}
 			auto buffer = new unsigned char[desireHeight * desireWidth * channels];
 
@@ -62,8 +59,8 @@ void stretch()
 void Utils::iterate()
 {
 	std::filesystem::current_path(Utils::source());
-	Utils::iterate_jpg;
-	Utils::iterate_jpg;
+	Utils::iterate_jpg();
+	Utils::iterate_png();
 }
 void Utils::iterate_jpg()
 {
