@@ -36,12 +36,9 @@ void stretch()
 		{
 			int desireWidth = iw;
 			int desireHeight = ih;
-			while (desireWidth > 150)
+			while (desireWidth > 150 || desireWidth > 150)
 			{
 				desireWidth/= 2;
-			}
-			while (desireWidth > 150)
-			{
 				desireHeight /= 2;
 			}
 			auto buffer = new unsigned char[desireHeight * desireWidth * channels];
@@ -76,7 +73,7 @@ void Utils::iterate_jpg()
 			//load and save picture into source
 			int iw, ih, n;
 			// Loading Pictures to Get Wide, High and Color Channel Information
-			unsigned char* img = stbi_load(fileinfo.name, &iw, &ih, &n, 3);
+			unsigned char* img = stbi_load(fileinfo.name, &iw, &ih, &n, 0);
 			size_t lastindex =std::string(fileinfo.name).find_last_of(".");
 			std::string rawname = std::string(fileinfo.name).substr(0, lastindex) +".bmp";
 			stbi_write_bmp(rawname.c_str(), iw, ih, n, img);
@@ -99,7 +96,7 @@ void Utils::iterate_png()
 		//load and save picture into source
 		int iw, ih, n;
 		// Loading Pictures to Get Wide, High and Color Channel Information
-		unsigned char* img = stbi_load(fileinfo.name, &iw, &ih, &n, 3);
+		unsigned char* img = stbi_load(fileinfo.name, &iw, &ih, &n, 0);
 		size_t lastindex = std::string(fileinfo.name).find_last_of(".");
 		std::string rawname = std::string(fileinfo.name).substr(0, lastindex) + ".bmp";
 		stbi_write_bmp(rawname.c_str(), iw, ih, n, img);
