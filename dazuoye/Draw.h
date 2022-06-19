@@ -13,7 +13,6 @@ class Draw
 };
 /*
 该函数可以在控制台画出一个bmp格式文件,参数为当前文件夹图片名
-
 首先要搞清楚24位bmp图的结构
 由三部分组成
 1.文件头
@@ -31,17 +30,17 @@ void Draw::drawImage(const char* fileName)
 	int bmpHeight;//图像的高
 	int biBitCount;//图像类型&#xff0c;每像素位数
 	BITMAPINFOHEADER head;//信息头
-	FILE* fp = fopen(fileName, "rb");//fp为文件指针,fopen()为打开一个文件的函数,第一个参数为文件名,第二个为读取方式,r代表read读取,b代表byte字节
+	FILE* fp = fopen(fileName, "rb");//fp为文件指针,fopen()为打开一个文件的函数,第一个参数为文件名,第二个为读取方式,r代表read读取,b代表binary
 	fseek(fp, sizeof(BITMAPFILEHEADER), 0);//fseek()表示在一个文件内寻找;参数依次为 文件指针  跳过的长度  开始位置
 	fread(&head, sizeof(BITMAPINFOHEADER), 1, fp);//freed表示 从文件fp里,读取1个长度为sizeof(BITMAPINFOHEADER)数据,储存到地址&head里
 	bmpWidth = head.biWidth;
 	bmpHeight = head.biHeight;
 	biBitCount = head.biBitCount;
-	int lineByte = bmpWidth * biBitCount / 8;//每一行的字节数,因为像素RGB值分量有三个,所以这是应该是宽度*3,由于是24位图,所以/8;
+	int lineByte = bmpWidth * biBitCount/8 ;//每一行的字节数,因为像素RGB值分量有三个,所以这是应该是宽度*3,由于是24位图,所以/8;
 	pBmpBuf = new unsigned  char[lineByte * bmpHeight];//定义指针指向的数据大小
 	fread(pBmpBuf, 1, lineByte * bmpHeight, fp);//读取数据,将图片位图数据储存到已经开辟好的临时缓存区
 	int i = bmpHeight * bmpWidth - bmpWidth;//i代表指针位置,由于位图数据的存储是倒过来的,所以第一行第一个应该是最后一行第一个
-	int count = 1;//代表指针位于当前行的位置
+	int count = 0;//代表指针位于当前行的位置
 	while (true)
 	{
 		//设置字体背景颜色
@@ -55,10 +54,10 @@ void Draw::drawImage(const char* fileName)
 		//如果读到当前最后一行
 		if (count == bmpWidth)
 		{
-			//指针进入上一行的第一个
-			i = i - 2 * bmpWidth + 1;
+			//指针进入上一行的第一个 
+			i = i -  2 * bmpWidth;
 			//位于当前行第一个
-			count = 1;
+			count = 0;
 			//图片打印换行
 			printf("\n");
 		}
@@ -73,14 +72,17 @@ void Draw::drawImage(const char* fileName)
 	fclose(fp);//关闭文件
 }
 
+//程序的主循环
 void Draw::display()
 {
-	
+	//如果你没有使用Utils::convert_BMP();
 	//std::filesystem::current_path(Utils::source());
 	struct _finddata_t fileinfo;
 	intptr_t hFile;
+	//保持程序持续运行
 	while (true)
 	{
+		//寻找第一个文件
 		if ((hFile = _findfirst("*.bmp", &fileinfo)) == -1)
 		{
 			printf("there are no bmp files to read");
@@ -88,6 +90,7 @@ void Draw::display()
 		}
 		do
 		{
+			//清掉控制台上一个输出的图片
 			system("cls");
 			Draw::drawImage(fileinfo.name);
 			getchar();

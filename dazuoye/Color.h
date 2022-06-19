@@ -67,7 +67,6 @@ Color colors[14] = {
 	/*Color(BLACK_BRIGHT,	118,118,118),
 	Color(WHITE_DARK,204,204,204)*/
 };
-
 /*
 这个方法就是得到一个颜色的近似色
 参数为一个像素的RGB值的三个分量
@@ -95,4 +94,3 @@ Color Color::getColor(int r, int g, int b)
 	}
 	return colors[index];
 }
-
